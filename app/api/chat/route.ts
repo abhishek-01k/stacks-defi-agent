@@ -1,8 +1,7 @@
 import { NextRequest } from "next/server";
-import { Message, StreamingTextResponse } from "ai";
-import { streamText } from "ai";
+import { Message, streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { tools } from "@/lib/agents/tools";
+import { tools as toolsArray } from "@/lib/agents/tools";
 
 const sysPrompt = `You are an AI assistant specialized in Stacks blockchain and its DeFi ecosystem. Help users interact with Stacks blockchain protocols like Velar, AlexGo, sBTC, and more.
 
@@ -15,6 +14,11 @@ Your main capabilities include:
 When explaining DeFi concepts, be clear and concise. Always prioritize security and explain any risks associated with actions.
 
 When showing balances or information, format it in a readable way, focusing on the most important data first.`;
+
+// Convert array of tools to a ToolSet object with name as key
+const tools = Object.fromEntries(
+  toolsArray.map(tool => [tool.name, tool])
+);
 
 export async function POST(req: NextRequest) {
   const { messages } = await req.json();
@@ -31,6 +35,6 @@ export async function POST(req: NextRequest) {
     maxSteps: 5, // Allow the model to make up to 5 tool calls in a single interaction
   });
   
-  // Return the response as a streaming text response
-  return new StreamingTextResponse(result.textStream);
+  // Create a readable stream from the text stream and return it as a response
+  return new Response(result.textStream);
 } 
