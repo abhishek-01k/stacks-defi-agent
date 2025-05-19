@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { openai } from '@ai-sdk/openai';
 import { allTools } from "./tools";
 
 // Assistant prompt for the Stacks DeFi agent
