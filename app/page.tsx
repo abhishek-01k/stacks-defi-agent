@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState , useEffect} from "react";
+import { useRef, useEffect } from "react";
 import { useChat } from "ai/react";
 
 export default function Home() {
@@ -14,80 +14,16 @@ export default function Home() {
     }
   }, [messages]);
 
-  // Handle message submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    // Add user message to the chat
-    const userMessage: Message = {
-      id: String(Date.now()),
-      role: "user",
-      content: input,
-    };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsLoading(true);
-
-    try {
-      // Send the message to the API
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(threadId ? { "thread-id": threadId } : {}),
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`API responded with status ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      // Save the thread ID for future messages
-      if (data.threadId && !threadId) {
-        setThreadId(data.threadId);
-      }
-
-      // Add the assistant's response to the chat
-      if (data.message) {
-        const assistantMessage: Message = {
-          id: String(Date.now() + 1),
-          role: "assistant",
-          content: data.message,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
-      // Add an error message
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(Date.now() + 1),
-          role: "assistant",
-          content: "Sorry, there was an error processing your request. Please try again.",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-    // Suggested queries
-    const suggestions = [
-      "What's my wallet address?",
-      "Show my STX balance",
-      "What tokens do I have?",
-      "Show my recent transactions",
-      "Tell me about Velar protocol",
-      "What tokens are available on AlexGo?",
-      "Check if I'm enrolled in sBTC incentives"
-    ];
+  // Suggested queries
+  const suggestions = [
+    "What's my wallet address?",
+    "Show my STX balance",
+    "What tokens do I have?",
+    "Show my recent transactions",
+    "Tell me about Velar protocol",
+    "What tokens are available on AlexGo?",
+    "Check if I'm enrolled in sBTC incentives"
+  ];
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-24 bg-gray-50">
@@ -113,6 +49,7 @@ export default function Home() {
                           const form = document.querySelector('form') as HTMLFormElement;
                           const input = form.querySelector('input') as HTMLInputElement;
                           input.value = suggestion;
+                          handleInputChange({ target: { value: suggestion } } as any);
                           form.dispatchEvent(new Event('submit', { cancelable: true }));
                         }}
                         className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-100"
@@ -187,10 +124,9 @@ export default function Home() {
               <button
                 key={suggestion}
                 onClick={() => {
-                  const form = document.querySelector('form') as HTMLFormElement;
-                  const input = form.querySelector('input') as HTMLInputElement;
-                  input.value = suggestion;
                   handleInputChange({ target: { value: suggestion } } as any);
+                  const form = document.querySelector('form') as HTMLFormElement;
+                  form.dispatchEvent(new Event('submit', { cancelable: true }));
                 }}
                 className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-200"
                 disabled={isLoading}
