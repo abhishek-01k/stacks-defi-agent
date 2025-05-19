@@ -26,15 +26,15 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 md:p-24 bg-gray-50">
+    <main className="flex flex-col items-center p-4 md:p-24 ">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-blue-600">Stacks DeFi Assistant</h1>
           <p className="text-gray-600 mt-2">Interact with Stacks blockchain protocols through natural language</p>
         </div>
-        
+
         {/* Chat container */}
-        <div className="bg-white rounded-lg shadow-lg p-4 mb-4 h-[500px] overflow-y-auto">
+        <div className="border-2 border-gray-100 rounded-lg shadow-lg p-4 mb-4 h-[500px] overflow-y-auto">
           <div className="space-y-4">
             {messages.length === 0 ? (
               <div className="flex justify-center items-center h-full">
@@ -64,16 +64,14 @@ export default function Home() {
               messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
+                  className={`flex ${message.role === "user" ? "justify-end" : "justify-start"
+                    }`}
                 >
                   <div
-                    className={`p-3 rounded-lg max-w-[80%] ${
-                      message.role === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-800"
-                    }`}
+                    className={`p-3 rounded-lg max-w-[80%] ${message.role === "user"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-800"
+                      }`}
                   >
                     {message.content.split("\n").map((line, i) => (
                       <div key={i}>{line || <br />}</div>
@@ -96,7 +94,7 @@ export default function Home() {
             <div ref={messagesEndRef} />
           </div>
         </div>
-        
+
         {/* Input form */}
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
@@ -115,7 +113,7 @@ export default function Home() {
             Send
           </button>
         </form>
-        
+
         {/* Suggestions */}
         <div className="mt-6">
           <h3 className="text-sm text-gray-600 mb-2">Try asking:</h3>
