@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-import { setupAssistant } from "@/lib/agents/openai";
-import { allTools } from "@/lib/agents/tools";
+import { setupAssistant } from "../../../lib/agents/openai";
+import { allTools } from "../../../lib/agents/tools";
 
 // Convert Vercel AI SDK messages to OpenAI messages
 const convertVercelMessageToOpenAIMessage = (message: VercelChatMessage) => {
