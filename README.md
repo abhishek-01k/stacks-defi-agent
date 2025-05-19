@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stacks DeFi AI Agent
+
+An AI-powered assistant for interacting with the Stacks blockchain and DeFi protocols built with Next.js, Vercel AI SDK, and OpenAI.
+
+## Features
+
+- **AI-powered Assistance**: Uses OpenAI's advanced AI models to understand user questions and provide helpful responses
+- **Wallet Information**: Check balances, token holdings, and transaction history
+- **DeFi Protocol Insights**: Get information about various Stacks DeFi protocols
+- **Modern UI**: Clean, responsive interface with real-time chat experience
+
+## What is Stacks?
+
+[Stacks](https://www.stacks.co/) is a blockchain connected to Bitcoin that enables smart contracts and decentralized applications (DApps). It brings programmability and smart contracts to Bitcoin while inheriting Bitcoin's security.
+
+## Prerequisites
+
+- Node.js 18+ installed
+- OpenAI API key (for AI capabilities)
+- Stacks wallet mnemonic (for blockchain interactions)
+- Optional: Hiro API key for increased rate limits
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/stacksdefiagent.git
+cd stacksdefiagent
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file in the root directory with the following variables:
+```
+WALLET_MNEMONIC=your_stacks_wallet_seed_phrase
+HIRO_API_KEY=your_hiro_api_key
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_ASSISTANT_NAME=Stacks DeFi Assistant
+OPENAI_MODEL=gpt-4-turbo
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Simply type your questions or commands into the chat input. Example queries:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- "What's my STX balance?"
+- "Show my token balances"
+- "What are the available DeFi protocols on Stacks?"
+- "Explain how sBTC works"
+- "Show me my recent transactions"
 
-## Deploy on Vercel
+## Technology Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js**: React framework for the frontend
+- **Vercel AI SDK**: Integration with OpenAI's assistants
+- **Stacks.js**: Interaction with the Stacks blockchain
+- **Tailwind CSS**: Styling
+- **TypeScript**: Type safety
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+- `src/app/`: Next.js application pages
+- `src/app/api/chat/`: API route for handling chat requests
+- `src/lib/agents/`: AI agent configuration
+- `src/lib/stacksblockchain/`: Stacks blockchain integration
+- `src/components/`: React components
+
+## Expanding the Project
+
+This project is designed to be extensible. Here are some ways to expand it:
+
+1. Add more tools for other Stacks DeFi protocols
+2. Implement transaction capabilities
+3. Add authentication to support multiple users
+4. Integrate with more blockchain networks
+
+## Credits
+
+This project builds upon and extends concepts from [PoXAgents](https://github.com/nescampos/PoXAgents) by adapting its tools to a modern web interface.
+
+## License
+
+MIT 
