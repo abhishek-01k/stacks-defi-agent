@@ -1,5 +1,5 @@
-import { openai } from '@ai-sdk/openai';
-import { allTools } from "./tools";
+import { openai } from "@ai-sdk/openai";
+import { tools } from "./tools";
 
 // Assistant prompt for the Stacks DeFi agent
 export const assistantPrompt = `You are an advanced AI assistant specialized in the Stacks blockchain and DeFi ecosystem. You help users interact with the Stacks blockchain, understand DeFi protocols, and manage their blockchain assets.
@@ -53,7 +53,7 @@ export async function setupAssistant() {
     name: process.env.OPENAI_ASSISTANT_NAME || "Stacks DeFi Assistant",
     instructions: assistantPrompt,
     model: process.env.OPENAI_MODEL || "gpt-4-turbo",
-    tools: Object.values(allTools).map(tool => tool.definition),
+    tools: Object.values(tools).map(tool => tool.definition),
   });
 
   console.log(`Created new assistant with ID: ${assistant.id}`);
