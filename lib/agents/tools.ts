@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { tool } from "ai";
 import { getAddress, getStxBalance, getTokenBalances, getRecentTransactions } from "../blockchain/wallet";
 import { getVelarTokens, getVelarPools } from "../blockchain/velar";
 import { getAlexFeeRates, getAlexAvailableTokens, getAlexTokenPrices } from "../blockchain/alexgo";
@@ -11,10 +12,9 @@ import {
 } from "../blockchain/sbtc";
 
 // Tool for getting the wallet address
-export const getWalletAddressTool = {
-  name: "get_wallet_address",
+export const getWalletAddressTool = tool({
   description: "Get the connected wallet address from the mnemonic.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const address = await getAddress();
@@ -24,16 +24,15 @@ export const getWalletAddressTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // Tool for getting STX balance
-export const getBalanceTool = {
-  name: "get_stx_balance",
+export const getBalanceTool = tool({
   description: "Get the native STX balance of a wallet. If no address is provided, uses the connected wallet.",
   parameters: z.object({
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet.")
-  }).optional(),
-  execute: async (args?: { address?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
       const balanceInfo = await getStxBalance(address);
@@ -43,16 +42,15 @@ export const getBalanceTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // Tool for getting token balances
-export const getTokenBalancesTool = {
-  name: "get_token_balances",
+export const getTokenBalancesTool = tool({
   description: "Get all token balances (including sBTC and other SIP-10 tokens) for a wallet address. If no address is provided, uses the connected wallet.",
   parameters: z.object({
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet.")
-  }).optional(),
-  execute: async (args?: { address?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
       const tokensInfo = await getTokenBalances(address);
@@ -62,17 +60,16 @@ export const getTokenBalancesTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // Tool for getting recent transactions
-export const getRecentTransactionsTool = {
-  name: "get_recent_transactions",
+export const getRecentTransactionsTool = tool({
   description: "Get the most recent transactions for a wallet address. If no address is provided, uses the connected wallet.",
   parameters: z.object({
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet."),
     limit: z.number().optional().describe("Number of transactions to return. Default is 10.")
-  }).optional(),
-  execute: async (args?: { address?: string, limit?: number }) => {
+  }),
+  execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
       const limit = args?.limit || 10;
@@ -83,17 +80,16 @@ export const getRecentTransactionsTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // === Velar Protocol Tools ===
 
-export const getVelarTokensTool = {
-  name: "get_velar_tokens",
+export const getVelarTokensTool = tool({
   description: "Get information about available tokens on the Velar protocol.",
   parameters: z.object({
     symbol: z.string().optional().describe("Optional token symbol to filter by. If not provided, returns all tokens.")
-  }).optional(),
-  execute: async (args?: { symbol?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const tokenInfo = await getVelarTokens(args?.symbol);
       return tokenInfo;
@@ -102,16 +98,15 @@ export const getVelarTokensTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getVelarPoolsTool = {
-  name: "get_velar_pools",
+export const getVelarPoolsTool = tool({
   description: "Get information about liquidity pools on the Velar protocol.",
   parameters: z.object({
     token0: z.string().optional().describe("First token in the pair"),
     token1: z.string().optional().describe("Second token in the pair")
-  }).optional(),
-  execute: async (args?: { token0?: string, token1?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const poolInfo = await getVelarPools(args?.token0, args?.token1);
       return poolInfo;
@@ -120,14 +115,13 @@ export const getVelarPoolsTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // === AlexGo Protocol Tools ===
 
-export const getAlexFeeRatesTool = {
-  name: "get_alex_fee_rates",
+export const getAlexFeeRatesTool = tool({
   description: "Get fee rates for swapping between tokens on the AlexGo protocol.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const feeInfo = await getAlexFeeRates();
@@ -137,12 +131,11 @@ export const getAlexFeeRatesTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getAlexAvailableTokensTool = {
-  name: "get_alex_available_tokens",
+export const getAlexAvailableTokensTool = tool({
   description: "Get a list of available tokens for swapping on the AlexGo protocol.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const tokensInfo = await getAlexAvailableTokens();
@@ -152,12 +145,11 @@ export const getAlexAvailableTokensTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getAlexTokenPricesTool = {
-  name: "get_alex_token_prices",
+export const getAlexTokenPricesTool = tool({
   description: "Get current token prices from the AlexGo protocol.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const priceInfo = await getAlexTokenPrices();
@@ -167,17 +159,16 @@ export const getAlexTokenPricesTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // === sBTC Protocol Tools ===
 
-export const isSbtcEnrolledTool = {
-  name: "is_sbtc_enrolled",
+export const isSbtcEnrolledTool = tool({
   description: "Check if a wallet is enrolled in sBTC incentives. If no address is provided, uses the connected wallet.",
   parameters: z.object({
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet.")
-  }).optional(),
-  execute: async (args?: { address?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
       const enrollmentInfo = await isSbtcEnrolled(address);
@@ -187,12 +178,11 @@ export const isSbtcEnrolledTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getSbtcCurrentCycleTool = {
-  name: "get_sbtc_current_cycle",
+export const getSbtcCurrentCycleTool = tool({
   description: "Get the current cycle ID for sBTC rewards.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const cycleInfo = await getSbtcCurrentCycle();
@@ -202,15 +192,14 @@ export const getSbtcCurrentCycleTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getSbtcRewardAddressTool = {
-  name: "get_sbtc_reward_address",
+export const getSbtcRewardAddressTool = tool({
   description: "Get the latest reward address for a wallet enrolled in sBTC incentives. If no address is provided, uses the connected wallet.",
   parameters: z.object({
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet.")
-  }).optional(),
-  execute: async (args?: { address?: string }) => {
+  }),
+  execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
       const rewardInfo = await getSbtcRewardAddress(address);
@@ -220,16 +209,15 @@ export const getSbtcRewardAddressTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const getSbtcRewardsByCycleTool = {
-  name: "get_sbtc_rewards_by_cycle",
+export const getSbtcRewardsByCycleTool = tool({
   description: "Get the sBTC rewards for a specific cycle and address.",
   parameters: z.object({
     cycle: z.number().describe("The cycle ID to check"),
     address: z.string().optional().describe("The wallet address to check. If not provided, uses the connected wallet.")
   }),
-  execute: async (args: { cycle: number, address?: string }) => {
+  execute: async (args) => {
     try {
       const address = args.address || await getAddress();
       const rewardsInfo = await getSbtcRewardsByCycle(args.cycle, address);
@@ -239,12 +227,11 @@ export const getSbtcRewardsByCycleTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
-export const enrollSbtcIncentivesTool = {
-  name: "enroll_sbtc_incentives",
+export const enrollSbtcIncentivesTool = tool({
   description: "Enroll the connected wallet in sBTC incentives.",
-  parameters: z.object({}).optional(),
+  parameters: z.object({}),
   execute: async () => {
     try {
       const enrollmentResult = await enrollSbtcIncentives();
@@ -254,29 +241,25 @@ export const enrollSbtcIncentivesTool = {
       return { error: error instanceof Error ? error.message : "Unknown error" };
     }
   }
-};
+});
 
 // Export all tools
-export const tools = [
-  // Wallet tools
-  getWalletAddressTool,
-  getBalanceTool,
-  getTokenBalancesTool,
-  getRecentTransactionsTool,
+export const tools = {
+  get_wallet_address: getWalletAddressTool,
+  get_stx_balance: getBalanceTool,
+  get_token_balances: getTokenBalancesTool,
+  get_recent_transactions: getRecentTransactionsTool,
   
-  // Velar tools
-  getVelarTokensTool,
-  getVelarPoolsTool,
+  get_velar_tokens: getVelarTokensTool,
+  get_velar_pools: getVelarPoolsTool,
   
-  // AlexGo tools
-  getAlexFeeRatesTool,
-  getAlexAvailableTokensTool,
-  getAlexTokenPricesTool,
+  get_alex_fee_rates: getAlexFeeRatesTool,
+  get_alex_available_tokens: getAlexAvailableTokensTool,
+  get_alex_token_prices: getAlexTokenPricesTool,
   
-  // sBTC tools
-  isSbtcEnrolledTool,
-  getSbtcCurrentCycleTool,
-  getSbtcRewardAddressTool,
-  getSbtcRewardsByCycleTool,
-  enrollSbtcIncentivesTool
-]; 
+  is_sbtc_enrolled: isSbtcEnrolledTool,
+  get_sbtc_current_cycle: getSbtcCurrentCycleTool,
+  get_sbtc_reward_address: getSbtcRewardAddressTool,
+  get_sbtc_rewards_by_cycle: getSbtcRewardsByCycleTool,
+  enroll_sbtc_incentives: enrollSbtcIncentivesTool,
+}; 

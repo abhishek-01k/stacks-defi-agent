@@ -1,4 +1,5 @@
-import { openai } from "@ai-sdk/openai";
+import { openai as aiSdkOpenai } from "@ai-sdk/openai";
+import OpenAI from "openai";
 import { tools } from "./tools";
 
 // Assistant prompt for the Stacks DeFi agent
@@ -32,30 +33,45 @@ export async function setupAssistant() {
     throw new Error("OPENAI_API_KEY is required");
   }
 
-  const openai = new OpenAI({
+  const openaiClient = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
   // If we have an existing assistant ID, use it
   if (process.env.OPENAI_ASSISTANT_ID) {
     try {
-      const assistant = await openai.beta.assistants.retrieve(
+      const assistant = await openaiClient.beta.assistants.retrieve(
         process.env.OPENAI_ASSISTANT_ID
       );
-      return { openai, assistant };
+      return { openai: openaiClient, assistant };
     } catch (error) {
       console.warn("Failed to retrieve existing assistant, creating a new one");
     }
   }
 
+  // Convert tools to the format expected by OpenAI Assistants API
+  const assistantTools = Object.values(tools).map(tool => ({
+    type: "function" as const,
+    function: {
+      name: tool.name,
+      description: tool.description,
+      // Convert Zod schema to JSON schema format for OpenAI
+      parameters: {
+        type: "object",
+        properties: {},
+        required: []
+      }
+    }
+  }));
+
   // Otherwise create a new assistant
-  const assistant = await openai.beta.assistants.create({
+  const assistant = await openaiClient.beta.assistants.create({
     name: process.env.OPENAI_ASSISTANT_NAME || "Stacks DeFi Assistant",
     instructions: assistantPrompt,
     model: process.env.OPENAI_MODEL || "gpt-4-turbo",
-    tools: Object.values(tools).map(tool => tool.definition),
+    tools: assistantTools,
   });
 
   console.log(`Created new assistant with ID: ${assistant.id}`);
-  return { openai, assistant };
+  return { openai: openaiClient, assistant };
 } 

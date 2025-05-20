@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import { Message, streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { tools as toolsArray } from "@/lib/agents/tools";
+import { Message, streamText, UIMessage } from "ai";
+import { model, type modelID } from "@/ai/providers";
+import { tools } from "@/lib/agents/tools";
 
 const sysPrompt = `You are an AI assistant specialized in Stacks blockchain and its DeFi ecosystem. Help users interact with Stacks blockchain protocols like Velar, AlexGo, sBTC, and more.
 
@@ -15,26 +15,32 @@ When explaining DeFi concepts, be clear and concise. Always prioritize security 
 
 When showing balances or information, format it in a readable way, focusing on the most important data first.`;
 
-// Convert array of tools to a ToolSet object with name as key
-const tools = Object.fromEntries(
-  toolsArray.map(tool => [tool.name, tool])
-);
+export const maxDuration = 30;
 
-export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
-  
-  // Get only the most recent user message
-  const lastUserMessage = messages[messages.length - 1];
-  
-  // AI chat completion with tool calling
-  const result = await streamText({
-    model: openai("gpt-4o"),
+export async function POST(req: Request) {
+  const {
+    messages,
+    selectedModel,
+  }: { messages: UIMessage[]; selectedModel: modelID } = await req.json();
+
+  const result = streamText({
+    model: model.languageModel(selectedModel),
     system: sysPrompt,
     messages: messages as Message[],
     tools,
-    maxSteps: 5, // Allow the model to make up to 5 tool calls in a single interaction
+    maxSteps: 5,
   });
-  
-  // Create a readable stream from the text stream and return it as a response
-  return new Response(result.textStream);
-} 
+
+  return result.toDataStreamResponse({
+    sendReasoning: true,
+    getErrorMessage: (error) => {
+      if (error instanceof Error) {
+        if (error.message.includes("Rate limit")) {
+          return "Rate limit exceeded. Please try again later.";
+        }
+      }
+      console.error(error);
+      return "An error occurred.";
+    },
+  });
+}
