@@ -35,7 +35,7 @@ npm install
 
 3. Create a `.env.local` file in the root directory with the following variables:
 ```
-WALLET_MNEMONIC=your_stacks_wallet_seed_phrase
+NEXT_PUBLIC_WALLET_MNEMONIC=your_stacks_wallet_seed_phrase
 HIRO_API_KEY=your_hiro_api_key
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_ASSISTANT_NAME=Stacks DeFi Assistant
@@ -83,10 +83,6 @@ This project is designed to be extensible. Here are some ways to expand it:
 2. Implement transaction capabilities
 3. Add authentication to support multiple users
 4. Integrate with more blockchain networks
-
-## Credits
-
-This project builds upon and extends concepts from [PoXAgents](https://github.com/nescampos/PoXAgents) by adapting its tools to a modern web interface.
 
 ## License
 

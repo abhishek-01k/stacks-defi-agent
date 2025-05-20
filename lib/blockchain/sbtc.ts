@@ -54,13 +54,13 @@ export async function isSbtcEnrolled(address: string) {
  */
 export async function getSbtcCurrentCycle() {
   try {
-    if (!process.env.WALLET_MNEMONIC) {
-      throw new Error("WALLET_MNEMONIC environment variable is not set.");
+    if (!process.env.NEXT_PUBLIC_WALLET_MNEMONIC) {
+      throw new Error("NEXT_PUBLIC_WALLET_MNEMONIC environment variable is not set.");
     }
     
     // Create a wallet from the mnemonic
     const wallet = await generateWallet({
-      secretKey: process.env.WALLET_MNEMONIC,
+      secretKey: process.env.NEXT_PUBLIC_WALLET_MNEMONIC,
       password: '',
     });
     const address = privateKeyToAddress(wallet.accounts[0].stxPrivateKey, 'mainnet');
@@ -165,13 +165,13 @@ export async function getSbtcRewardsByCycle(cycle: number, address: string) {
  */
 export async function enrollSbtcIncentives() {
   try {
-    if (!process.env.WALLET_MNEMONIC) {
-      throw new Error("WALLET_MNEMONIC environment variable is not set.");
+    if (!process.env.NEXT_PUBLIC_WALLET_MNEMONIC) {
+      throw new Error("NEXT_PUBLIC_WALLET_MNEMONIC environment variable is not set.");
     }
     
     // Create a wallet from the mnemonic
     const wallet = await generateWallet({
-      secretKey: process.env.WALLET_MNEMONIC,
+      secretKey: process.env.NEXT_PUBLIC_WALLET_MNEMONIC,
       password: '',
     });
     const address = privateKeyToAddress(wallet.accounts[0].stxPrivateKey, 'mainnet');

@@ -4,7 +4,6 @@ import { defaultModel, type modelID } from "@/ai/providers";
 import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
 import { Textarea } from "./textarea";
-import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
 import { Header } from "./header";
 import { toast } from "sonner";
@@ -52,7 +51,6 @@ export default function Chat() {
     <div className="h-dvh flex flex-col justify-center w-full stretch">
       {messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
-          <ProjectOverview />
           <div className="mt-6">
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Try asking about Stacks DeFi:</h3>
             <div className="flex flex-wrap gap-2">

@@ -171,6 +171,7 @@ export const isSbtcEnrolledTool = tool({
   execute: async (args) => {
     try {
       const address = args?.address || await getAddress();
+      console.log("Checking if wallet is enrolled in sBTC incentives:", address);
       const enrollmentInfo = await isSbtcEnrolled(address);
       return { address, ...enrollmentInfo };
     } catch (error) {

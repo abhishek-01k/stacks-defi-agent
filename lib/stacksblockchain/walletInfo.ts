@@ -9,15 +9,15 @@ import axios from "axios";
  */
 export async function getAddress() {
   // Check if the mnemonic environment variable is set
-  if (!process.env.WALLET_MNEMONIC) {
+  if (!process.env.NEXT_PUBLIC_WALLET_MNEMONIC) {
     throw new Error(
-      "WALLET_MNEMONIC environment variable is not set. You need to set it to create a wallet client."
+      "NEXT_PUBLIC_WALLET_MNEMONIC environment variable is not set. You need to set it to create a wallet client."
     );
   }
 
   // Create a wallet from the mnemonic
   const wallet = await generateWallet({
-    secretKey: process.env.WALLET_MNEMONIC,
+    secretKey: process.env.NEXT_PUBLIC_WALLET_MNEMONIC,
     password: '',
   });
 
@@ -33,10 +33,10 @@ export async function getAddress() {
  */
 export async function getNativeBalanceFromAddress(address: string) {
   let header = undefined;
-  if (process.env.HIRO_API_KEY) {
+  if (process.env.NEXT_PUBLIC_HIRO_API_KEY) {
     header = {
         headers: {
-            'X-API-Key': process.env.HIRO_API_KEY
+            'X-API-Key': process.env.NEXT_PUBLIC_HIRO_API_KEY
         }
     };
   }

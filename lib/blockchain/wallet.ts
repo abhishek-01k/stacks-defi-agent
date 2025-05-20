@@ -3,10 +3,10 @@ import { privateKeyToAddress, fetchCallReadOnlyFunction } from "@stacks/transact
 import axios from "axios";
 
 // Flag to use mock data when environment variables are not set
-const USE_MOCK_DATA = !process.env.WALLET_MNEMONIC || !process.env.NEXT_PUBLIC_HIRO_API_KEY;
+const USE_MOCK_DATA = !process.env.NEXT_PUBLIC_WALLET_MNEMONIC || !process.env.NEXT_PUBLIC_HIRO_API_KEY;
 
 // Mock wallet address for testing
-const MOCK_WALLET_ADDRESS = "SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7";
+const MOCK_WALLET_ADDRESS = "SP3B7FY57XQYZMR14YPYX93XY7K0CVVKEYWWKATV3";
 
 /**
  * Get the address from the mnemonic in the environment file
@@ -19,12 +19,12 @@ export async function getAddress() {
     return MOCK_WALLET_ADDRESS;
   }
 
-  if (!process.env.WALLET_MNEMONIC) {
-    throw new Error("WALLET_MNEMONIC environment variable is not set.");
+  if (!process.env.NEXT_PUBLIC_WALLET_MNEMONIC) {
+    throw new Error("NEXT_PUBLIC_WALLET_MNEMONIC environment variable is not set.");
   }
 
   const wallet = await generateWallet({
-    secretKey: process.env.WALLET_MNEMONIC,
+    secretKey: process.env.NEXT_PUBLIC_WALLET_MNEMONIC,
     password: '',
   });
 
@@ -193,7 +193,7 @@ export async function getRecentTransactions(address: string, limit = 10) {
     const txList = [
       {
         id: "0x8912450a196dff7308f82d9dd0ea6734c7f28110c5d352e5f2c752a38b7bb4c5",
-        from: "SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7",
+        from: "SP3B7FY57XQYZMR14YPYX93XY7K0CVVKEYWWKATV3",
         status: "success",
         stxSent: "100.5",
         stxReceived: "0",
@@ -209,7 +209,7 @@ export async function getRecentTransactions(address: string, limit = 10) {
       },
       {
         id: "0x9a3ebf67a1ab46767d382cf2da81ef4ca27ecc7c8cf83c95c9e45d77c29d91c3",
-        from: "SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7",
+        from: "SP3B7FY57XQYZMR14YPYX93XY7K0CVVKEYWWKATV3",
         status: "success",
         stxSent: "5.3",
         stxReceived: "0",
